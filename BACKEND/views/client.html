@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Client</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel = "stylesheet" href="style.css">
+	<script>
+		var name = prompt("Tên đội chơi");
+	</script>
+</head>
+<body>
+    
+    <div id="intro">
+      <h1>Client</h1>
+    </div>
+    
+    <ul id="messages"></ul>
+    
+    <form action="">
+      <input id="m" placeholder="noi dung" autocomplete="off" required /><button>Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+		
+    		var socket = io();
+    		socket.emit('joining msg', name);
+
+    		$('form').submit(function(e) {
+    			e.preventDefault();            // will prevent page reloading
+      			socket.emit('chat message', (name + ':  ' + $('#m').val()));
+                        $('#messages').append($('<li id="list">').text(name +":" + $('#m').val()));
+      			$('#m').val('');
+      			return false;
+    		});
+    		socket.on('chat message', function(msg){
+            $('#messages').append($('<li>').text(msg));
+        });
+        socket.on('chat server', function(msg){
+            $('#messages').append($('<li>').text(msg));
+    		});
+  		
+    </script>
+</body>
+</html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Chat realtime NodeJS demo</title>
+
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/chat.js"></script>
+</head>
+
+<body>
+
+<fieldset>
+    <legend>Demo chat realtime NodeJS</legend>
+    <input type="text" id="username" name="username" placeholder="Enter name">
+    <br>
+    <div id="content"></div>
+
+    <input id="message" placeholder="Write something..">
+    <br>
+    <button id="sendMessage">SEND</button>
+</fieldset>
+
+</body>
+</html> -->
